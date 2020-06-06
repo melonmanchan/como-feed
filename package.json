@@ -10,6 +10,13 @@
     "start:prod": "tsc && node dist/main.js"
   },
   "dependencies": {
-    "typescript": "^3.9.5"
+    "@slack/client": "^5.0.2",
+    "@types/ioredis": "^4.16.4",
+    "@types/node-fetch": "^2.5.7",
+    "@types/uuid": "^8.0.0",
+    "ioredis": "^4.17.3",
+    "node-fetch": "^2.6.0",
+    "typescript": "^3.9.5",
+    "uuid": "^8.1.0"
   }
 }
