@@ -26,6 +26,8 @@ async function main() {
   const posts = [...((document.querySelectorAll('.aiheet-seksi') as unknown) as Array<Element>)];
 
   const formatted = posts.map((p) => {
+    const imageUrl = p.querySelector('.wp-post-image')?.getAttribute('data-src');
+    console.log(imageUrl);
     const url = p.querySelector('a')?.href;
     const title = p.querySelector('.entry-title > a')?.innerHTML;
     const blurb = p.querySelector('.entry-content > p')?.innerHTML;
@@ -42,6 +44,7 @@ async function main() {
 
     return {
       url,
+      imageUrl,
       title,
       blurb,
       releasedAt,
