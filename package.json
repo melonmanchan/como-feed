@@ -1,0 +1,15 @@
+{
+  "name": "como-feed",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:melonmanchan/como-feed.git",
+  "author": "Matti Jokitulppo <melonmanchan@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "start:prod": "tsc && node dist/main.js"
+  },
+  "dependencies": {
+    "typescript": "^3.9.5"
+  }
+}
