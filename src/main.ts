@@ -4,17 +4,23 @@ import redis from 'ioredis';
 import { IncomingWebhook } from '@slack/client';
 import { JSDOM } from 'jsdom';
 
-const client = redis.createClient(process.env.REDIS_URL || undefined);
+const client = new redis(process.env.REDIS_URL || undefined);
 const id = uuidv4();
-const log = (msg: string, ...rest: any) => console.log(`[id:${id}] ${msg}`, rest);
+const log = (msg: string) => console.log(`[id:${id}] ${msg}`);
 
 process.on('unhandledRejection', (e) => {
   console.error(e); // eslint-disable-line
   throw new Error('Unhandled exception');
 });
 
-const webhooksUrls: Array<string> = (process.env.SLACK_WEBHOOK_URLS || '').split(',');
-const webhooks: Array<IncomingWebhook> = webhooksUrls.map((url) => new IncomingWebhook(url));
+const url = process.env.SLACK_WEBHOOK_URL;
+
+if (!url) {
+  log('slack webhook url is not defined');
+  process.exit(-1);
+}
+
+const webhook: IncomingWebhook = new IncomingWebhook(url);
 
 async function main() {
   const URL = 'https://www.como.fi/aiheet/seksi/';
@@ -27,7 +33,6 @@ async function main() {
 
   const formatted = posts.map((p) => {
     const imageUrl = p.querySelector('.wp-post-image')?.getAttribute('data-src');
-    console.log(imageUrl);
     const url = p.querySelector('a')?.href;
     const title = p.querySelector('.entry-title > a')?.innerHTML;
     const blurb = p.querySelector('.entry-content > p')?.innerHTML;
@@ -52,7 +57,17 @@ async function main() {
     };
   });
 
-  console.log(JSON.stringify(formatted, null, 2));
+  for (const post of formatted) {
+    if (await client.exists(post.url!)) {
+      log(`${post.url} already sent`);
+    } else {
+      log(`${post.url} not sent`);
+      webhook.send(`${post.title} - ${post.url}`);
+      await client.set(post.url!, JSON.stringify(post));
+    }
+  }
+
+  process.exit(0);
 }
 
 main();
