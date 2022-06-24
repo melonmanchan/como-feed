@@ -17,7 +17,7 @@
     "@types/node-fetch": "^2.5.7",
     "@types/uuid": "^8.0.0",
     "ioredis": "^4.17.3",
-    "jsdom": "^16.2.2",
+    "jsdom": "^16.5.0",
     "node-fetch": "^2.6.0",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.9.5",
